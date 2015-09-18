@@ -1,6 +1,5 @@
 package xyz.jadonfowler.jvmbg;
 
-import java.util.*;
 import org.objectweb.asm.*;
 
 public class JVMMethod implements Opcodes {
@@ -9,11 +8,12 @@ public class JVMMethod implements Opcodes {
     JVMClass superClass;
     int variableCount = 0;
 
-    public JVMMethod(String name, Modifiers... ms) {
-        this(name, "()V", ms);
+    public JVMMethod(JVMClass clazz, String name, Modifiers... ms) {
+        this(clazz, name, "()V", ms);
     }
 
-    public JVMMethod(String name, String dec, Modifiers... ms) {
+    public JVMMethod(JVMClass clazz, String name, String dec, Modifiers... ms) {
+        this.superClass = clazz;
         int m = 0;
         for (Modifiers k : ms)
             m += k.toACC();

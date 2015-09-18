@@ -84,7 +84,6 @@ public class JVMClass implements Opcodes {
     }
 
     public JVMClass addMethod(JVMMethod m) {
-        m.superClass = this;
         m.createAsmMethod();
         return this;
     }
