@@ -4,7 +4,6 @@ import java.util.*;
 import org.objectweb.asm.*;
 
 public class JVMMethod implements Opcodes {
-    private ArrayList<MethodInstruction> instructions = new ArrayList<MethodInstruction>();
     private final int modifiers;
     private String description;
     JVMClass superClass;
@@ -20,14 +19,14 @@ public class JVMMethod implements Opcodes {
             m += k.toACC();
         this.modifiers = m;
         this.description = dec;
-        //Start code creation for JIT compilation
+        // Start code creation for JIT compilation
         superClass.mv = superClass.cw.visitMethod(modifiers, name, description, null, null);
         superClass.mv.visitCode();
     }
 
     public JVMMethod addInstructions(MethodInstruction... is) {
         for (MethodInstruction i : is)
-            instructions.add(i);
+            i.run(this);
         return this;
     }
 
@@ -64,8 +63,6 @@ public class JVMMethod implements Opcodes {
 
     // public JVMMethod changeLocalVariable(String identifier, Object value){
     public void createAsmMethod() {
-        for (MethodInstruction i : instructions)
-            i.run(this);
         superClass.mv.visitInsn(RETURN);
         int argumentCount = description.split("(")[1].split(")")[0].length();
         superClass.mv.visitMaxs(variableCount > 0 ? 1 : 0, variableCount + argumentCount);
