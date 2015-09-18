@@ -14,6 +14,7 @@ public class JVMClass implements Opcodes {
     FieldVisitor fv;
     MethodVisitor mv;
     AnnotationVisitor av0;
+    int fieldCount = 0;
 
     public JVMClass(String dec) {
         this(dec, Modifiers.PUBLIC);
@@ -30,23 +31,27 @@ public class JVMClass implements Opcodes {
         this.modifiers = m;
         this.name = name.replace(".", "/");
         this.superClass = superClass.replace(".", "/");
-        createAsmClass();
+        cw.visit(52, modifiers, name, null, superClass, null);
+        // Constructor is Public, called '<init>', and returns void ('V')
+        mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
+        mv.visitCode();
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitMethodInsn(INVOKESPECIAL, superClass, "<init>", "()V", false);
     }
 
-    private void createAsmClass() {
-        cw.visit(52, modifiers, name, null, superClass, null);
-        {
-            // Constructor is Public, called '<init>', and returns void ('V')
-            mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
-            mv.visitCode();
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitMethodInsn(INVOKESPECIAL, superClass, "<init>", "()V", false);
-            mv.visitInsn(RETURN);
-            mv.visitMaxs(1, 1);
-            mv.visitEnd();
-        }
-        // cw.visitEnd();
-        // return cw.toByteArray();
+    public void addField(LocalVariable v){
+        
+    }
+    
+    
+    /**
+     * Should only be called once all fields have been added
+     */
+    public void createConstructor() {
+        
+        mv.visitInsn(RETURN);
+        mv.visitMaxs(1 + fieldCount, 1);
+        mv.visitEnd();
     }
 
     public JVMClass addMethod(JVMMethod m) {
@@ -54,8 +59,9 @@ public class JVMClass implements Opcodes {
         m.createAsmMethod();
         return this;
     }
-    
-    public void build(String output /*Directory? File? Just use JVMClass#name?*/) {
-        //TODO Output to file
+
+    public void build(
+            String output /* Directory? File? Just use JVMClass#name? */) {
+        // TODO Output to file
     }
 }

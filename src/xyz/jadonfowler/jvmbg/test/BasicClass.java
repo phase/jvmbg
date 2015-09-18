@@ -2,8 +2,9 @@ package xyz.jadonfowler.jvmbg.test;
 
 public class BasicClass {
     
-    public static void method(){
-        double d = 1234.1235;
-    }
+    int variable = 12;
+    int variable2 = 122;
+    int variable3 = 14;
+    
     
 }
