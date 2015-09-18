@@ -8,10 +8,10 @@ import org.objectweb.asm.Opcodes;
 
 public class JVMClass implements Opcodes {
     private final int modifiers;
-    private final String dec;
+    private final String description;
     private final String superClass;
     private JVMMethod[] methods = new JVMMethod[64]; // Need more?
-    ClassWriter cw = new ClassWriter(0);
+    ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
     FieldVisitor fv;
     MethodVisitor mv;
     AnnotationVisitor av0;
@@ -29,13 +29,13 @@ public class JVMClass implements Opcodes {
         for (Modifiers k : ms)
             m += k.toACC();
         this.modifiers = m;
-        this.dec = dec.replace(".", "/");
+        this.description = dec.replace(".", "/");
         this.superClass = superClass.replace(".", "/");
         createAsmClass();
     }
 
     private void createAsmClass() {
-        cw.visit(52, modifiers, dec, null, superClass, null);
+        cw.visit(52, modifiers, description, null, superClass, null);
         {
             // Constructor is Public, called '<init>', and returns void ('V')
             mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
@@ -50,8 +50,9 @@ public class JVMClass implements Opcodes {
         // return cw.toByteArray();
     }
 
-    public void addMethod(JVMMethod m) {
+    public JVMClass addMethod(JVMMethod m) {
         m.superClass = this;
         m.createAsmMethod();
+        return this;
     }
 }
