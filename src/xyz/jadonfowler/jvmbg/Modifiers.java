@@ -1,8 +1,8 @@
 package xyz.jadonfowler.jvmbg;
 
-import org.objectweb.asm.Opcodes;
+import static org.objectweb.asm.Opcodes.*;
 
-public enum Modifiers implements Opcodes {
+public enum Modifiers {
     PUBLIC(ACC_PUBLIC), PRIVATE(ACC_PRIVATE), STATIC(ACC_STATIC);
     int m;
 
@@ -12,5 +12,12 @@ public enum Modifiers implements Opcodes {
 
     public int toACC() {
         return m;
+    }
+
+    public static Modifiers from(String s) {
+        if (s.equalsIgnoreCase("static")) return STATIC;
+        else if (s.equalsIgnoreCase("public")) return PUBLIC;
+        else if (s.equalsIgnoreCase("private")) return PRIVATE;
+        else return null;
     }
 }
