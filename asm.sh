@@ -1,1 +1,0 @@
-java -cp "asm.jar;bin/" org.objectweb.asm.util.ASMifier xyz.jadonfowler.jvmbg.test.BasicClass > asm.java~
