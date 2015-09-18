@@ -31,10 +31,11 @@ public class JVMMethod implements Opcodes {
     }
 
     public void createLocalVariable(LocalVariable v) {
-        int argumentCount = description.split("(")[1].split(")")[0].length();
         switch (v.getType()) {
         case INT:
-            superClass.mv.visitIntInsn(BIPUSH, (int) v.getValue());
+            int value = (int) v.getValue();
+            if (Math.abs(value) >= 128) superClass.mv.visitIntInsn(SIPUSH, value);
+            else superClass.mv.visitIntInsn(BIPUSH, value);
             superClass.mv.visitVarInsn(ISTORE, variableCount);
         case STRING:
             superClass.mv.visitLdcInsn(v.getValue().toString());
