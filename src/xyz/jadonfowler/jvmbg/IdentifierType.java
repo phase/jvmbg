@@ -1,6 +1,8 @@
 package xyz.jadonfowler.jvmbg;
 
-public enum IdentifierType {
+//import static org.objectweb.asm.Opcodes.*;
+
+public enum IdentifierType{
     BYTE("B"), CHAR("C"), STRING("S"), INT("I"), LONG("J"), FLOAT("F"), DOUBLE("D"), BOOLEAN("Z"), VOID("V");
     String descriptor;
 

@@ -11,7 +11,7 @@ public class Variable {
         this.value = value;
     }
 
-    public String getIdentifer() {
+    public String getIdentifier() {
         return identifier;
     }
 
