@@ -42,7 +42,7 @@ public class JVMClass implements Opcodes {
      * 
      * @param v
      */
-    public void addField(Variable v) {
+    public void createField(Variable v) {
         // Create Field
         fv = cw.visitField(0, v.getIdentifier(), v.getType().toString(), null, null);
         fv.visitEnd();

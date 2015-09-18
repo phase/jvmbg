@@ -24,9 +24,9 @@ public class JVMMethod implements Opcodes {
         superClass.mv.visitCode();
     }
 
-    public JVMMethod addInstructions(MethodInstruction... is) {
-        for (MethodInstruction i : is)
-            i.run(this);
+    public JVMMethod addInstructions(Runnable... is) {
+        for (Runnable i : is)
+            i.run();
         return this;
     }
 

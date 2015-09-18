@@ -7,8 +7,8 @@ public class JVMBG {
         JVMClass clazz = new JVMClass("Test"); // public class Test extends java.lang.Object
         JVMMethod method = new JVMMethod(clazz, "test", Modifiers.PUBLIC, Modifiers.STATIC);
         method.addInstructions(
-                (m) -> m.createLocalVariable(new Variable(IdentifierType.INT, "variable", 7)), //int variable = 7
-                (m) -> {}
+                () -> method.createLocalVariable(new Variable(IdentifierType.INT, "variable", 7)), //int variable = 7
+                () -> {}
                 );
         clazz.addMethod(method);
         clazz.build("./");
