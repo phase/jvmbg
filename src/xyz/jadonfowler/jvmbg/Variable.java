@@ -1,11 +1,11 @@
 package xyz.jadonfowler.jvmbg;
 
-public class LocalVariable {
+public class Variable {
     private String identifier;
     private Object value;
     private IdentifierType type;
 
-    public LocalVariable(IdentifierType type, String identifier, Object value) {
+    public Variable(IdentifierType type, String identifier, Object value) {
         this.identifier = identifier;
         this.type = type;
         this.value = value;

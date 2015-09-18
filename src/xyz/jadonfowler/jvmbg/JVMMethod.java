@@ -30,7 +30,7 @@ public class JVMMethod implements Opcodes {
         return this;
     }
 
-    public void createLocalVariable(LocalVariable v) {
+    public void createLocalVariable(Variable v) {
         switch (v.getType()) {
         case INT:
             int value = (int) v.getValue();

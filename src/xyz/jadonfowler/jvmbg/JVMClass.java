@@ -39,7 +39,7 @@ public class JVMClass implements Opcodes {
         mv.visitMethodInsn(INVOKESPECIAL, superClass, "<init>", "()V", false);
     }
 
-    public void addField(LocalVariable v){
+    public void addField(Variable v){
         
     }
     
