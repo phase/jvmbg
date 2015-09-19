@@ -1,7 +1,7 @@
 #JVMBG
-A JVM Bytecode Generator for JIT compilers.
+A JVM Bytecode Generator for compilers.
 
-JVMBG offers an easy-to-use API that can work with JIT, lazy JIT, or normal parsers.
+JVMBG offers an easy-to-use API that can work with lazy or normal AOT compilers.
 
 Here's a sample of this awesomeness (*Note: This is a major WIP and won't work as expected right now!*):
 ```java
