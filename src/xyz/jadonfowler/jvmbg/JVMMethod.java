@@ -4,7 +4,7 @@ import org.objectweb.asm.*;
 
 public class JVMMethod implements Opcodes {
     private final int modifiers;
-    private String description;
+    protected String description;
     int variableCount = 0;
 
     public JVMMethod(String name, Modifiers... ms) {
@@ -14,7 +14,7 @@ public class JVMMethod implements Opcodes {
     public JVMMethod(String name, String dec, Modifiers... ms) {
         int m = 0;
         for (Modifiers k : ms)
-            m += k.toACC();
+            m |= k.toACC();
         this.modifiers = m;
         this.description = dec;
         // Start code creation for JIT compilation
@@ -61,6 +61,7 @@ public class JVMMethod implements Opcodes {
     }
 
     // public JVMMethod changeLocalVariable(String identifier, Object value){
+    
     public void createAsmMethod() {
         JVMClass.mv.visitInsn(RETURN);
         int argumentCount = description.split("(")[1].split(")")[0].length();

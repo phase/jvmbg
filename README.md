@@ -7,17 +7,18 @@ Here's a sample of this awesomeness (*Note: This is a major WIP and won't work a
 ```java
 //Example
 JVMClass clazz = new JVMClass("xyz/jadonfowler/derp/Test"); // public class Test extends java.lang.Object
-clazz.addInstructions(
-    // Class fields
-    () -> clazz.createField(new Variable(IdentifierType.BOOLEAN, "isField", true)), // boolean isField = true
-    () -> clazz.createConstructor() // finishes the constructor bytecode, should be called AFTER fields are added
-);
+
+JVMConstructor constructor = new JVMConstructor(clazz, Modifiers.PUBLIC); // public Test()
+constructor.addInstructions(
+        // Creates a field called 'field' and sets it to 12
+        () -> constructor.createField(new Variable(IdentifierType.INT, "field", 12))
+        );
+clazz.addMethod(constructor); // Finsishes up the constructor bytecode
 
 JVMMethod method = new JVMMethod("test", Modifiers.PUBLIC, Modifiers.STATIC); // public static void test()
 method.addInstructions(
     () -> method.createLocalVariable(new Variable(IdentifierType.INT, "variable", 7)), // int variable = 7
     () -> method.changeLocalVariable("variable", 12)
-    // Any lines in here get JIT compiled automatically, but you can only build one method at a time.
 );
 
 clazz.addMethod(method); // Finishes up the method bytecode

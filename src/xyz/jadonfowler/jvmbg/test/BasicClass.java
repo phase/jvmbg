@@ -2,11 +2,10 @@ package xyz.jadonfowler.jvmbg.test;
 
 public class BasicClass {
     
-    int i = 12;
-    int k = 1234;
+    int i = 0;
     
-    public static void method(){
-        int j = 14;
+    public BasicClass(int k) {
+        int j = 0;
     }
     
 }
