@@ -27,7 +27,7 @@ public class JVMClass implements Opcodes {
         this.modifiers = m;
         this.name = name.replace(".", "/");
         this.superClass = superClass.replace(".", "/");
-        cw.visit(52, modifiers, name, null, superClass, null);
+        cw.visit(52, modifiers, name, null, this.superClass, null);
     }
 
     public JVMClass addMethod(JVMMethod m) {
