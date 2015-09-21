@@ -41,7 +41,7 @@ public class JVMMethod implements Opcodes {
                 break;
             }
         }
-        if (v == null) throw new IllegalArgumentException("Variable " + identifier + " not found in " + name + "()");
+        assert v == null : "Variable " + identifier + " not found in " + name + "()";
         int variableIndex = variables.indexOf(v);
         switch (v.getType()) {
         case INT:
