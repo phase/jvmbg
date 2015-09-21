@@ -44,13 +44,14 @@ public class JVMConstructor extends JVMMethod {
     }
 
     public void callSuperConstructor() {
+        JVMClass.mv.visitVarInsn(ALOAD, 0);
         JVMClass.mv.visitMethodInsn(INVOKESPECIAL, this.superClass.superClass, "<init>", "()V", false);
     }
 
     @Override public void build() {
         JVMClass.mv.visitInsn(RETURN);
         int argumentCount = this.description.split("(")[1].split(")")[0].length();
-        JVMClass.mv.visitMaxs(1 + fieldCount, 1 + variableCount + argumentCount);
+        JVMClass.mv.visitMaxs(1 + fieldCount, 1 + this.variables.size() + argumentCount);
         JVMClass.mv.visitEnd();
         JVMClass.mv = null;
     }
