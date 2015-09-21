@@ -1,7 +1,7 @@
-#JVMBG
+#JVM Bytecode Generator
 A JVM Bytecode Generator for compilers.
 
-JVMBG offers an easy-to-use API that can work with lazy or normal AOT compilers.
+JVMBG offers an easy-to-use API that can work with lazy or normal compilers.
 
 Here's a sample of this awesomeness (*Note: This is a major WIP and won't work as expected right now!*):
 ```java
@@ -13,7 +13,7 @@ clazz.addInstructions(
     () -> clazz.createConstructor() // finishes the constructor bytecode, should be called AFTER fields are added
 );
 
-JVMMethod method = new JVMMethod(clazz, "test", Modifiers.PUBLIC, Modifiers.STATIC); // public static void test()
+JVMMethod method = new JVMMethod("test", Modifiers.PUBLIC, Modifiers.STATIC); // public static void test()
 method.addInstructions(
     () -> method.createLocalVariable(new Variable(IdentifierType.INT, "variable", 7)), // int variable = 7
     () -> method.changeLocalVariable("variable", 12)
@@ -21,4 +21,5 @@ method.addInstructions(
 );
 
 clazz.addMethod(method); // Finishes up the method bytecode
+clazz.build(); // Output class files into local directory
 ```

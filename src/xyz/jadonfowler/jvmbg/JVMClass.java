@@ -1,17 +1,17 @@
 package xyz.jadonfowler.jvmbg;
 
+import java.io.*;
 import org.objectweb.asm.*;
 
 public class JVMClass implements Opcodes {
     private final int modifiers;
     private final String name;
     private final String superClass;
-    ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-    FieldVisitor fv;
-    MethodVisitor mv;
-    AnnotationVisitor av0;
+    static ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+    static FieldVisitor fv;
+    static MethodVisitor mv;
+    static AnnotationVisitor av0;
     int fieldCount = 0;
-    Label constructorLabel;
 
     public JVMClass(String dec) {
         this(dec, Modifiers.PUBLIC);
@@ -33,12 +33,11 @@ public class JVMClass implements Opcodes {
         mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
         mv.visitCode();
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitMethodInsn(INVOKESPECIAL, superClass, "<init>", "()V", false);
-        constructorLabel = new Label(); //Not sure if this is the right location to put this
+        mv.visitMethodInsn(INVOKESPECIAL, this.superClass, "<init>", "()V", false);
     }
 
     /**
-     * Should be called before constructor is closed
+     * Should be called before constructor is closed!
      * 
      * @param v
      */
@@ -47,8 +46,6 @@ public class JVMClass implements Opcodes {
         fv = cw.visitField(0, v.getIdentifier(), v.getType().toString(), null, null);
         fv.visitEnd();
         mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
-        mv.visitCode();
-        mv.visitLabel(constructorLabel);
         mv.visitVarInsn(ALOAD, fieldCount);
         switch (v.getType()) {
         case INT:
@@ -88,8 +85,15 @@ public class JVMClass implements Opcodes {
         return this;
     }
 
-    public void build(
-            String output /* Directory? File? Just use JVMClass#name? */) {
-        // TODO Output to file
+    public void build() {
+        cw.visitEnd();
+        final byte[] classBytes = cw.toByteArray();
+        try (FileOutputStream stream = new FileOutputStream(name + ".class")) {
+            stream.write(classBytes);
+            stream.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
