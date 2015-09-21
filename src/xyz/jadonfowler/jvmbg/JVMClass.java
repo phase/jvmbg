@@ -31,7 +31,7 @@ public class JVMClass implements Opcodes {
     }
 
     public JVMClass addMethod(JVMMethod m) {
-        m.createAsmMethod();
+        m.build();
         return this;
     }
 

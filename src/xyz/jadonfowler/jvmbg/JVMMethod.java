@@ -22,12 +22,6 @@ public class JVMMethod implements Opcodes {
         JVMClass.mv.visitCode();
     }
 
-    public JVMMethod addInstructions(Runnable... is) {
-        for (Runnable i : is)
-            i.run();
-        return this;
-    }
-
     public void createLocalVariable(Variable v) {
         switch (v.getType()) {
         case INT:
@@ -62,7 +56,7 @@ public class JVMMethod implements Opcodes {
 
     // public JVMMethod changeLocalVariable(String identifier, Object value){
     
-    public void createAsmMethod() {
+    protected void build() {
         JVMClass.mv.visitInsn(RETURN);
         int argumentCount = description.split("(")[1].split(")")[0].length();
         JVMClass.mv.visitMaxs(variableCount > 0 ? 1 : 0, variableCount + argumentCount);

@@ -47,7 +47,7 @@ public class JVMConstructor extends JVMMethod {
         JVMClass.mv.visitMethodInsn(INVOKESPECIAL, this.superClass.superClass, "<init>", "()V", false);
     }
 
-    @Override public void createAsmMethod() {
+    @Override public void build() {
         JVMClass.mv.visitInsn(RETURN);
         int argumentCount = this.description.split("(")[1].split(")")[0].length();
         JVMClass.mv.visitMaxs(1 + fieldCount, 1 + variableCount + argumentCount);
