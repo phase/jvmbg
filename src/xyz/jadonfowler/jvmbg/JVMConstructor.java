@@ -24,19 +24,26 @@ public class JVMConstructor extends JVMMethod {
             int value = (int) v.getValue();
             if (Math.abs(value) >= 128) JVMClass.mv.visitIntInsn(SIPUSH, value);
             else JVMClass.mv.visitIntInsn(BIPUSH, value);
+            break;
         case STRING:
             JVMClass.mv.visitLdcInsn(v.getValue().toString());
+            break;
         case BOOLEAN:
             if ((boolean) v.getValue()) JVMClass.mv.visitInsn(ICONST_1);
             else JVMClass.mv.visitInsn(ICONST_0);
+            break;
         case CHAR:
             JVMClass.mv.visitIntInsn(BIPUSH, (int) ((char) v.getValue())); // Overcasting?
+            break;
         case LONG:
             JVMClass.mv.visitLdcInsn((long) v.getValue());
+            break;
         case FLOAT:
             JVMClass.mv.visitLdcInsn((float) v.getValue());
+            break;
         case DOUBLE:
             JVMClass.mv.visitLdcInsn((double) v.getValue());
+            break;
         default:
             break;
         }
@@ -50,7 +57,8 @@ public class JVMConstructor extends JVMMethod {
 
     @Override public void build() {
         JVMClass.mv.visitInsn(RETURN);
-        int argumentCount = this.description.split("(")[1].split(")")[0].length();
+        
+        int argumentCount = this.description.split("\\(")[1].split("\\)")[0].length();
         JVMClass.mv.visitMaxs(1 + fieldCount, 1 + this.variables.size() + argumentCount);
         JVMClass.mv.visitEnd();
         JVMClass.mv = null;

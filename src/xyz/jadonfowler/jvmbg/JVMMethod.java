@@ -49,25 +49,32 @@ public class JVMMethod implements Opcodes {
             if (Math.abs(vi) >= 128) JVMClass.mv.visitIntInsn(SIPUSH, vi);
             else JVMClass.mv.visitIntInsn(BIPUSH, vi);
             JVMClass.mv.visitVarInsn(ISTORE, variableIndex);
+            break;
         case STRING:
             JVMClass.mv.visitLdcInsn(value.toString());
             JVMClass.mv.visitVarInsn(ASTORE, variableIndex);
+            break;
         case BOOLEAN:
             if ((boolean) value) JVMClass.mv.visitInsn(ICONST_1);
             else JVMClass.mv.visitInsn(ICONST_0);
             JVMClass.mv.visitVarInsn(ISTORE, variableIndex);
+            break;
         case CHAR:
             JVMClass.mv.visitIntInsn(BIPUSH, (int) ((char) value)); // Overcasting?
             JVMClass.mv.visitVarInsn(ISTORE, variableIndex);
+            break;
         case LONG:
             JVMClass.mv.visitLdcInsn((long) value);
             JVMClass.mv.visitVarInsn(LSTORE, variableIndex);
+            break;
         case FLOAT:
             JVMClass.mv.visitLdcInsn((float) value);
             JVMClass.mv.visitVarInsn(FSTORE, variableIndex);
+            break;
         case DOUBLE:
             JVMClass.mv.visitLdcInsn((double) value);
             JVMClass.mv.visitVarInsn(DSTORE, variableIndex);
+            break;
         default:
             break;
         }
@@ -80,7 +87,7 @@ public class JVMMethod implements Opcodes {
     protected void build() {
         final int variableCount = variables.size();
         JVMClass.mv.visitInsn(RETURN);
-        int argumentCount = description.split("(")[1].split(")")[0].length();
+        int argumentCount = description.split("\\(")[1].split("\\)")[0].length();
         JVMClass.mv.visitMaxs(variableCount > 0 ? 1 : 0, variableCount + argumentCount);
         JVMClass.mv.visitEnd();
         JVMClass.mv = null;
