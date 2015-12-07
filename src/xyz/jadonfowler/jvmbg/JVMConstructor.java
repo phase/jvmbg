@@ -3,6 +3,7 @@ package xyz.jadonfowler.jvmbg;
 public class JVMConstructor extends JVMMethod {
     private int fieldCount = 0;
     private final JVMClass superClass;
+    private boolean finishedFields = false;
 
     public JVMConstructor(JVMClass superClass, Modifiers... ms) {
         this(superClass, "()V", ms);
@@ -10,15 +11,17 @@ public class JVMConstructor extends JVMMethod {
 
     public JVMConstructor(JVMClass superClass, String dec, Modifiers... ms) {
         super("<init>", dec, ms);
+        JVMClass.mv.visitVarInsn(ALOAD, 0);
         this.superClass = superClass;
     }
 
     public void createField(Variable v) {
+        assert!finishedFields : "Fields can not be added after they have been finished!";
         // Create Field
         JVMClass.fv = JVMClass.cw.visitField(0, v.getIdentifier(), v.getType().toString(), null, null);
         JVMClass.fv.visitEnd();
-        JVMClass.mv = JVMClass.cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
-        JVMClass.mv.visitVarInsn(ALOAD, fieldCount);
+        JVMClass.mv.visitVarInsn(ALOAD, 0);
+        // Push value
         switch (v.getType()) {
         case INT:
             int value = (int) v.getValue();
@@ -47,7 +50,15 @@ public class JVMConstructor extends JVMMethod {
         default:
             break;
         }
+        // Pop value and store into field
+         System.out.println("Field in `" + superClass.name + "` with name of `" +
+         v.getIdentifier() + "` of type `" + v.getType().toString() + "` with value `" + v.getValue() + "`");
         JVMClass.mv.visitFieldInsn(PUTFIELD, superClass.name, v.getIdentifier(), v.getType().toString());
+        fieldCount++;
+    }
+
+    public void finishFields() {
+        this.finishedFields = true;
     }
 
     public void callSuperConstructor() {
@@ -57,8 +68,8 @@ public class JVMConstructor extends JVMMethod {
 
     @Override public void build() {
         JVMClass.mv.visitInsn(RETURN);
-        
         int argumentCount = this.description.split("\\(")[1].split("\\)")[0].length();
+        System.out.println("Constructor Maxes: " + (1 + fieldCount) + "," + (1 + this.variables.size() + argumentCount));
         JVMClass.mv.visitMaxs(1 + fieldCount, 1 + this.variables.size() + argumentCount);
         JVMClass.mv.visitEnd();
         JVMClass.mv = null;
