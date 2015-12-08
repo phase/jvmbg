@@ -41,7 +41,11 @@ public class JVMMethod implements Opcodes {
                 break;
             }
         }
-        assert v == null : "Variable " + identifier + " not found in " + name + "()";
+        changeLocalVariable(v, value);
+    }
+
+    public void changeLocalVariable(Variable v, Object value) {
+        assert v == null : "Variable `" + v + "` not found in " + name + "()";
         int variableIndex = variables.indexOf(v);
         switch (v.getType()) {
         case INT:
@@ -80,8 +84,37 @@ public class JVMMethod implements Opcodes {
         }
     }
 
-    public void createIf(int somehow_get_boolean, Runnable block) {
-        // TODO
+    public void changeField(String clazz, Variable v, Object value) {
+        v.setValue(value); // just in case
+        JVMClass.mv.visitVarInsn(ALOAD, 0);
+        switch (v.getType()) {
+        case INT:
+            if (Math.abs((int) value) >= 128) JVMClass.mv.visitIntInsn(SIPUSH, (int) value);
+            else JVMClass.mv.visitIntInsn(BIPUSH, (int) value);
+            break;
+        case STRING:
+            JVMClass.mv.visitLdcInsn(value.toString());
+            break;
+        case BOOLEAN:
+            if ((boolean) value) JVMClass.mv.visitInsn(ICONST_1);
+            else JVMClass.mv.visitInsn(ICONST_0);
+            break;
+        case CHAR:
+            JVMClass.mv.visitIntInsn(BIPUSH, (int) ((char) value)); // Overcasting?
+            break;
+        case LONG:
+            JVMClass.mv.visitLdcInsn((long) value);
+            break;
+        case FLOAT:
+            JVMClass.mv.visitLdcInsn((float) value);
+            break;
+        case DOUBLE:
+            JVMClass.mv.visitLdcInsn((double) value);
+            break;
+        default:
+            break;
+        }
+        JVMClass.mv.visitFieldInsn(PUTFIELD, clazz, v.getIdentifier(), v.getType().toString());
     }
 
     protected void build() {

@@ -10,10 +10,11 @@ public class JVMBG {
         constructor.finishFields();
         clazz.addMethod(constructor);
         
-        //JVMMethod method = new JVMMethod("test", Modifiers.PUBLIC, Modifiers.STATIC);
+        JVMMethod method = new JVMMethod("test", Modifiers.PUBLIC, Modifiers.STATIC);
         //int variable = 7
-        //method.createLocalVariable(new Variable(IdentifierType.INT, "variable", 7));
-        //clazz.addMethod(method);
+        method.createLocalVariable(new Variable(IdentifierType.INT, "variable", 7));
+        method.changeLocalVariable("variable", 12);
+        clazz.addMethod(method);
         
         clazz.build();
     }

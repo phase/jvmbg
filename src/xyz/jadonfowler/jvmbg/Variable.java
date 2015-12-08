@@ -22,4 +22,8 @@ public class Variable {
     public Object getValue() {
         return value;
     }
+
+    public void setValue(Object v) {
+        this.value = v;
+    }
 }
